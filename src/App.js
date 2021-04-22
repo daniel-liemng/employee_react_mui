@@ -1,11 +1,11 @@
 import React from "react";
 
 import { ThemeProvider, makeStyles, CssBaseline } from "@material-ui/core";
-import PeopleOutlineTwoToneIcon from "@material-ui/icons/PeopleOutlineTwoTone";
 
-import { SideMenu, Header, PageHeader } from "./components";
+import { SideMenu, Header } from "./components";
 
 import { theme } from "./theme";
+import Employees from "./pages/Employees/Employees";
 
 const useStyles = makeStyles((theme) => ({
   appMain: {
@@ -23,11 +23,8 @@ const App = () => {
       <SideMenu />
       <div className={classes.appMain}>
         <Header />
-        <PageHeader
-          icon={<PeopleOutlineTwoToneIcon fontSize='large' />}
-          title='Page title'
-          subtitle='description'
-        />
+
+        <Employees />
       </div>
     </ThemeProvider>
   );
