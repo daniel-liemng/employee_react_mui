@@ -41,6 +41,9 @@ const EmployeeForm = () => {
       tempErrors.fullName = fieldValues.fullName
         ? ""
         : "This field is required!";
+
+    // if ("email" in fieldValues)
+    //   tempErrors.email = fieldValues.email ? "" : "This field is required!";
     if ("email" in fieldValues)
       tempErrors.email = /$^|.+@.+..+/.test(fieldValues.email)
         ? ""
@@ -73,7 +76,8 @@ const EmployeeForm = () => {
     e.preventDefault();
 
     if (validate()) {
-      window.alert("OK");
+      // window.alert("OK");
+      employeeService.insertEmployee(values);
     }
   };
 
