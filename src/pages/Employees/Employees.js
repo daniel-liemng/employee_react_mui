@@ -26,7 +26,7 @@ const headCells = [
   { id: "fullName", label: "Employee Name" },
   { id: "email", label: "Email Address (Personal)" },
   { id: "mobile", label: "Mobile Number" },
-  { id: "department", label: "Department" },
+  { id: "department", label: "Department", disableSorting: true },
 ];
 
 const Employees = () => {
@@ -38,7 +38,7 @@ const Employees = () => {
     TblContainer,
     TblHead,
     TblPagination,
-    recordsAfterPagingSorting,
+    recordsAfterPagingAndSorting,
   } = useTable(records, headCells);
 
   console.log(records);
@@ -55,7 +55,7 @@ const Employees = () => {
         <TblContainer>
           <TblHead />
           <TableBody>
-            {recordsAfterPagingSorting().map((item) => (
+            {recordsAfterPagingAndSorting().map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.fullName}</TableCell>
                 <TableCell>{item.email}</TableCell>
