@@ -18,6 +18,8 @@ import EmployeeForm from "./EmployeeForm";
 import useTable from "../../uitls/useTable";
 import * as EmployeeService from "../../services/employeeService";
 import { Controls } from "../../controls/Controls";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -37,7 +39,8 @@ const headCells = [
   { id: "fullName", label: "Employee Name" },
   { id: "email", label: "Email Address (Personal)" },
   { id: "mobile", label: "Mobile Number" },
-  { id: "department", label: "Department", disableSorting: true },
+  { id: "department", label: "Department" },
+  { id: "actions", label: "Actions", disableSorting: true },
 ];
 
 const Employees = () => {
@@ -50,6 +53,7 @@ const Employees = () => {
     },
   });
   const [openPopup, setOpenPopup] = useState(false);
+  const [recordForEdit, setRecordForEdit] = useState(null);
 
   const {
     TblContainer,
@@ -74,7 +78,27 @@ const Employees = () => {
     });
   };
 
-  // const addOrEditEmployee = (employ)
+  const addOrEditEmployee = (employee, resetForm) => {
+    // Check insert if id = 0
+    if (employee.id === 0) {
+      // Insert, then reset form, then close popup, then get new updated records to list
+      EmployeeService.insertEmployee(employee);
+    } else {
+      // Update
+      EmployeeService.updateEmployee(employee);
+    }
+
+    // Then reset form, then reset recordForEdit,then close popup, then get new updated records to list
+    resetForm();
+    setRecordForEdit(null);
+    setOpenPopup(false);
+    setRecords(EmployeeService.getAllEmployees);
+  };
+
+  const openInPopup = (item) => {
+    setRecordForEdit(item);
+    setOpenPopup(true);
+  };
 
   return (
     <>
@@ -102,7 +126,10 @@ const Employees = () => {
             variant='outlined'
             startIcon={<AddIcon />}
             className={classes.newButton}
-            onClick={() => setOpenPopup(true)}
+            onClick={() => {
+              setOpenPopup(true);
+              setRecordForEdit(null);
+            }}
           />
         </Toolbar>
         <TblContainer>
@@ -114,6 +141,17 @@ const Employees = () => {
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.mobile}</TableCell>
                 <TableCell>{item.department}</TableCell>
+                <TableCell>
+                  <Controls.ActionButton color='primary'>
+                    <EditOutlinedIcon
+                      fontSize='small'
+                      onClick={() => openInPopup(item)}
+                    />
+                  </Controls.ActionButton>
+                  <Controls.ActionButton color='secondary'>
+                    <CloseIcon fontSize='small' />
+                  </Controls.ActionButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -125,7 +163,10 @@ const Employees = () => {
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
-        <EmployeeForm />
+        <EmployeeForm
+          recordForEdit={recordForEdit}
+          addOrEditEmployee={addOrEditEmployee}
+        />
       </Popup>
     </>
   );

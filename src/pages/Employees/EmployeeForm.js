@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Grid, makeStyles } from "@material-ui/core";
 import { useForm, Form } from "../../uitls/useForm";
@@ -31,8 +31,10 @@ const genderList = [
   { id: "2", title: "female", label: "Female" },
 ];
 
-const EmployeeForm = () => {
+const EmployeeForm = (props) => {
   const classes = useStyles();
+
+  const { addOrEditEmployee, recordForEdit } = props;
 
   const validate = (fieldValues = values) => {
     let tempErrors = { ...errors };
@@ -72,12 +74,21 @@ const EmployeeForm = () => {
     resetForm,
   } = useForm(initialValues, true, validate);
 
+  // For edit -> get the values to fill in form
+  useEffect(() => {
+    if (recordForEdit !== null) {
+      setValues({ ...recordForEdit });
+    }
+  }, [recordForEdit]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (validate()) {
-      // window.alert("OK");
-      employeeService.insertEmployee(values);
+      // employeeService.insertEmployee(values);
+      // resetForm();
+
+      addOrEditEmployee(values, resetForm);
     }
   };
 

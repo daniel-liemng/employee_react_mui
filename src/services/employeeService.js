@@ -33,6 +33,17 @@ export const insertEmployee = (data) => {
   localStorage.setItem(KEYS.employees, JSON.stringify(employees));
 };
 
+export const updateEmployee = (data) => {
+  let employees = getAllEmployees();
+
+  // Find index of employee need to be updated
+  let recordIndex = employees.findIndex((x) => x.id === data.id);
+
+  employees[recordIndex] = { ...data };
+
+  localStorage.setItem(KEYS.employees, JSON.stringify(employees));
+};
+
 export const getAllEmployees = () => {
   if (localStorage.getItem(KEYS.employees) === null) {
     localStorage.setItem(KEYS.employees, JSON.stringify([]));
