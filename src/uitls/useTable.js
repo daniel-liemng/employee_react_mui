@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const useTable = (records, headCells) => {
+const useTable = (records, headCells, filterFn) => {
   const classes = useStyles();
 
   // Paging
@@ -132,10 +132,17 @@ const useTable = (records, headCells) => {
 
   // slice(start, end) -> start: page * RPP, end: (page + 1) * RPP
   const recordsAfterPagingAndSorting = () => {
-    return stableSort(records, getComparator(order, orderBy)).slice(
-      page * rowsPerPage,
-      (page + 1) * rowsPerPage
-    );
+    //// FOR PAGING & SORTING
+    // return stableSort(records, getComparator(order, orderBy)).slice(
+    //   page * rowsPerPage,
+    //   (page + 1) * rowsPerPage
+    // );
+
+    //// FOR PAGING & SORTING & FILTERING
+    return stableSort(
+      filterFn.fn(records),
+      getComparator(order, orderBy)
+    ).slice(page * rowsPerPage, (page + 1) * rowsPerPage);
   };
 
   return {
