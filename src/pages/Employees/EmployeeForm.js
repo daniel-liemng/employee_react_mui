@@ -81,8 +81,8 @@ const EmployeeForm = () => {
     }
   };
 
-  console.log("VVV", values);
-  console.log("EEE", errors);
+  // console.log("VVV", values);
+  // console.log("EEE", errors);
 
   return (
     <Form onSubmit={handleSubmit} className={classes.root} autoComplete='off'>

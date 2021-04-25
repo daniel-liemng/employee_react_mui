@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import PeopleOutlineTwoToneIcon from "@material-ui/icons/PeopleOutlineTwoTone";
 import SearchIcon from "@material-ui/icons/Search";
+import AddIcon from "@material-ui/icons/Add";
 import {
   Paper,
   makeStyles,
@@ -12,7 +13,7 @@ import {
   InputAdornment,
 } from "@material-ui/core";
 
-import { PageHeader } from "../../components";
+import { PageHeader, Popup } from "../../components";
 import EmployeeForm from "./EmployeeForm";
 import useTable from "../../uitls/useTable";
 import * as EmployeeService from "../../services/employeeService";
@@ -25,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
   },
   searchInput: {
     width: "75%",
+  },
+  newButton: {
+    position: "absolute",
+    right: "10px",
   },
 }));
 
@@ -44,6 +49,7 @@ const Employees = () => {
       return items;
     },
   });
+  const [openPopup, setOpenPopup] = useState(false);
 
   const {
     TblContainer,
@@ -68,6 +74,8 @@ const Employees = () => {
     });
   };
 
+  // const addOrEditEmployee = (employ)
+
   return (
     <>
       <PageHeader
@@ -76,7 +84,6 @@ const Employees = () => {
         subtitle='Form design with validation'
       />
       <Paper className={classes.pageContent}>
-        {/* <EmployeeForm /> */}
         <Toolbar>
           <Controls.Input
             label='Search Employees'
@@ -89,6 +96,13 @@ const Employees = () => {
                 </InputAdornment>
               ),
             }}
+          />
+          <Controls.Button
+            text='Add New'
+            variant='outlined'
+            startIcon={<AddIcon />}
+            className={classes.newButton}
+            onClick={() => setOpenPopup(true)}
           />
         </Toolbar>
         <TblContainer>
@@ -106,6 +120,13 @@ const Employees = () => {
         </TblContainer>
         <TblPagination />
       </Paper>
+      <Popup
+        title='Employee Form'
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+      >
+        <EmployeeForm />
+      </Popup>
     </>
   );
 };
