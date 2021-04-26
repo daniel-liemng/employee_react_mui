@@ -20,6 +20,8 @@ import * as EmployeeService from "../../services/employeeService";
 import { Controls } from "../../controls/Controls";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import CloseIcon from "@material-ui/icons/Close";
+import Notification from "../../controls/Notification";
+import ConfirmDialog from "../../controls/ConfirmDialog";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
@@ -54,6 +56,16 @@ const Employees = () => {
   });
   const [openPopup, setOpenPopup] = useState(false);
   const [recordForEdit, setRecordForEdit] = useState(null);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: "",
+    subTitle: "",
+  });
 
   const {
     TblContainer,
@@ -93,11 +105,35 @@ const Employees = () => {
     setRecordForEdit(null);
     setOpenPopup(false);
     setRecords(EmployeeService.getAllEmployees);
+
+    // Then show Notification
+    setNotify({
+      isOpen: true,
+      message: "Submitted Successfully",
+      type: "success",
+    });
   };
 
   const openInPopup = (item) => {
     setRecordForEdit(item);
     setOpenPopup(true);
+  };
+
+  const onDelete = (id) => {
+    // Close confirm dialog
+    setConfirmDialog({ ...confirmDialog, isOpen: false });
+
+    EmployeeService.deleteEmployee(id);
+
+    // Delete, then update list
+    setRecords(EmployeeService.getAllEmployees);
+
+    // Notify
+    setNotify({
+      isOpen: true,
+      message: "Deleted Successfully",
+      type: "error",
+    });
   };
 
   return (
@@ -148,7 +184,18 @@ const Employees = () => {
                       onClick={() => openInPopup(item)}
                     />
                   </Controls.ActionButton>
-                  <Controls.ActionButton color='secondary'>
+                  <Controls.ActionButton
+                    color='secondary'
+                    onClick={() => {
+                      /* onDelete(item.id); */
+                      setConfirmDialog({
+                        isOpen: true,
+                        title: "Are you sure to delete this employee? ",
+                        subTitle: "You can't undo this operation.",
+                        onConfirm: () => onDelete(item.id),
+                      });
+                    }}
+                  >
                     <CloseIcon fontSize='small' />
                   </Controls.ActionButton>
                 </TableCell>
@@ -168,6 +215,11 @@ const Employees = () => {
           addOrEditEmployee={addOrEditEmployee}
         />
       </Popup>
+      <Notification notify={notify} setNotify={setNotify} />
+      <ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </>
   );
 };

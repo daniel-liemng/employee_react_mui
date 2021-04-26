@@ -5,6 +5,8 @@ import Checkbox from "./Checkbox";
 import DatePicker from "./DatePicker";
 import Button from "./Button";
 import ActionButton from "./ActionButton";
+import Notification from "./Notification";
+import ConfirmDialog from "./ConfirmDialog";
 
 export const Controls = {
   Input,
@@ -14,4 +16,5 @@ export const Controls = {
   DatePicker,
   Button,
   ActionButton,
+  Notification,
 };
