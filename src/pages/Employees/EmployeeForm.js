@@ -79,6 +79,7 @@ const EmployeeForm = (props) => {
     if (recordForEdit !== null) {
       setValues({ ...recordForEdit });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [recordForEdit]);
 
   const handleSubmit = (e) => {

@@ -74,7 +74,7 @@ const Employees = () => {
     recordsAfterPagingAndSorting,
   } = useTable(records, headCells, filterFn);
 
-  console.log(records);
+  // console.log(records);
 
   const handleSearch = (e) => {
     let target = e.target;
